@@ -298,6 +298,15 @@ def train():
         # print("Using modified chat template:", model_args.base_model)
         tokenizer.chat_template = chat_template[model_args.base_model]
 
+    # DeepSeek distill models use DeepSeek chat markers even with a Qwen backbone.
+    if (
+        isinstance(tokenizer.chat_template, str)
+        and "<｜Assistant｜>" in tokenizer.chat_template
+        and "<｜User｜>" in tokenizer.chat_template
+    ):
+        response_template = "<｜Assistant｜>"
+        instruction_template = "<｜User｜>"
+
     total_num_params = ds_param_count(model, trainable_only=False)
     total_trainable_params = 0
     trainable_params = model_args.trainable_params.split("|")

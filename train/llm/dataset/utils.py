@@ -218,7 +218,11 @@ class PackedDataset(Dataset):
             self.max_length,
         )
         print(f"Packed dataset into {len(self.bins)} bins.")
-        print(f"Average bin utilization: {np.mean([sum(len(self.dataset[i]["input_ids"]) for i in bin_indices)/self.max_length for bin_indices in self.bins]):.4f}")
+        average_bin_utilization = np.mean([
+            sum(len(self.dataset[i]["input_ids"]) for i in bin_indices) / self.max_length
+            for bin_indices in self.bins
+        ])
+        print(f"Average bin utilization: {average_bin_utilization:.4f}")
 
     def __get_single_item(self, index: int) -> Dict[str, Any]:
         instance = self.dataset[index]
